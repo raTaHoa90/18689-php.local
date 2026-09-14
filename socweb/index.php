@@ -1,6 +1,10 @@
 <?php
-    if(isset($_REQUEST['error']))
-        $error = $_REQUEST['error'];
+    include_once "lib/session.php";
+    include_once "lib/utils.php";
+    include_once 'DATA/users.php';
+
+    if(isset($_SESSION['error']))
+        $error = $_SESSION['error'];
 
     $action = $_GET['action'] ?? 'main';
     if(! file_exists("templates/pages/$action.php")) {
@@ -8,7 +12,7 @@
         http_response_code(404);
     }
 
-    $isAuth = isset($_COOKIE['hasAuth']);
+    AutoAuth(false);
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
