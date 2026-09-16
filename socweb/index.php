@@ -13,6 +13,13 @@
     }
 
     AutoAuth(false);
+    $thisUser = $user;
+    
+    if($thisUser){
+        $curUser = getUserById($_GET['f_id'] ?? 0);
+        if($curUser !== null && $curUser['id'] != $user['id'])
+            $user = $curUser;
+    }
 ?><!DOCTYPE html>
 <html lang="en">
 <head>

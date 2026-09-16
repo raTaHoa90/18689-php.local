@@ -13,7 +13,7 @@
     <h3>Мои друзья:</h3>
     <div class="friends">
         <?php foreach($friends as $friend): ?>
-        <a href="/?action=friend&f_id<?= $friend['id'] ?>" class="avatar" 
+        <a href="/?action=friend&f_id=<?= $friend['id'] ?>" class="avatar" 
             style="background-image: url(<?= $friend['avatar'] ?>);" title="<?= $friend['fio'] ?>"></a>
         <?php endforeach; ?>
     </div>

@@ -7,6 +7,8 @@ $users = json_decode($file, true);
 $isAuth = false;
 $user = null;
 
+const CONTINUE_ARRAY = ['.','..'];
+
 /*
     id:
     login:
@@ -73,4 +75,20 @@ function AutoAuth(bool $isToBack = false){
 
     if($isToBack && !$user)
         toBack();
+}
+
+function getAllPhotos($user){
+    $path = 'img/photos_'.$user['id'];
+
+    $result = [];
+    if(!is_dir($path))
+        return $result;
+
+    $catalog = dir($path);
+    while(false !== ($entry = $catalog->read())){
+        if(!in_array($entry, CONTINUE_ARRAY) && !is_dir($path.'/'.$entry))
+            $result[] = $entry;
+    }
+
+    return $result;
 }
