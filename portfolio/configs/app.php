@@ -3,6 +3,7 @@ return [
     'paths' => [
         'controllers' => 'controllers',
         'templates' => 'views',
-        'models' => 'DATA'
+        'models' => 'DATA',
+        'temp' => 'temp'
     ]
 ];

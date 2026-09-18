@@ -54,6 +54,15 @@ function loadModel($name){
     return $models[$name];
 }
 
+function hasLoadCorrectFileImage(string $name): bool{
+    return 
+        isset($_FILES[$name]) &&
+        $_FILES[$name]['error'] == 0 &&
+        substr($_FILES[$name]['type'], 0, 6) == 'image/';
+}
+
 include_once "lib/session.php";
+include_once "lib/Routes.php";
+include_once "lib/View.php";
 
 loadModel('users');
