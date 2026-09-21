@@ -31,6 +31,6 @@
         </div>
     </div>
 
-    <footer>&copy; 2025 Все права защищены</footer>
+    <footer>&copy; 2026 Все права защищены</footer>
 </body>
 </html>

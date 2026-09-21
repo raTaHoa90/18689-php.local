@@ -7,7 +7,7 @@ function GET_catalogs(){
 
     $menu = include 'menu/admin.php';
     view('admin/catalogs', [
-        'caption' => 'Портфолио: '.$user['fio'],
+        'caption' => 'Портфолио: '.($user['fio'] ?? $user['login']),
         'menu' => $menu,
         'user' => $user
     ]);
@@ -82,11 +82,25 @@ function POST_getCatalogs(){
             $result[] = $data;
         }
 
+    usort($result, function($a, $b){
+        if($a['type'] == $b['type'])
+            return $a['name'] <=> $b['name'];
+        elseif($a['type'] == 'dir')
+            return -1;
+        else
+            return 1;
+    });
+
     echo json_encode($result);
 }
 
 function POST_createDir(){
     $data = ajax_init_catalog();
+
+    $dirname = ($_POST['dirname'] ?? ''); 
+
+    if(!preg_match('/^[\wа-яА-ЯёЁ_+=\(\) !\.-]+$/i', $dirname))
+        ajax_error('каталог с таким именем недопустим');
 
     $fullpath = $data['path'].'/'.($_POST['dirname'] ?? '');
     if(is_dir($fullpath))
@@ -125,4 +139,42 @@ function POST_uploadFile(){
         }
 
     echo json_encode($result);
+}
+
+function delete_dir($path){
+    if(!is_dir($path)) return;
+
+    $entries = scandir($path); // альтернативный способ получить все содержимое каталога разом в виде массива
+    foreach($entries as $entry)
+        if($entry != '.' && $entry != '..'){
+            $fullPath = $path.'/'.$entry;
+            if(filetype($fullPath) == 'dir')
+                delete_dir($fullPath); // рекурсивно удаляем содержимое вложенного каталога
+            else
+                unlink($fullPath); // удалить файл
+        }
+    rmdir($path); // удаляем каталог
+}
+
+function POST_deleteDir(){
+    $data = ajax_init_catalog();
+
+    $fullpath = $data['path'].'/'.($_POST['dirname'] ?? '');
+    if(!is_dir($fullpath))
+        ajax_error('такой каталог отсутствует');
+
+    delete_dir($fullpath);
+
+    echo json_encode(['ok'=>true]);
+}
+
+function POST_deleteFile(){
+    $data = ajax_init_catalog();
+    $fullPath = $data['path'].'/'.($_POST['filename'] ?? '');
+    if(!file_exists($fullPath))
+        ajax_error('такой файл отсутствует');
+
+    unlink($fullPath);
+
+    echo json_encode(['ok'=>true]);
 }

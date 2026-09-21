@@ -1,7 +1,10 @@
 <?php
 
 function GET_auth(){
-    $data = ['caption' => 'Авторизация'];
+    $data = [
+        'caption' => 'Авторизация',
+        'menu' => include 'menu/auth.php'
+    ];
 
     if(isset($_SESSION['error']))
         $data['error'] = $_SESSION['error'];
