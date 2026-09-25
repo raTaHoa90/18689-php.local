@@ -1,0 +1,47 @@
+<?php
+
+namespace lib;
+
+class View implements IView {
+
+    private function loadPage(string $path, array $pages = []): string{
+        $content = file_get_contents(config('app.paths.templates', 'views'). "/$path.php");
+
+        // заменяем все вставки {{VAR}} на те что уже были
+        if(count($pages))
+            $content = strtr($content, $pages); // {{CONTENT}} => $page
+
+        // разбиваем файл шаблона на строки
+        $lines = explode(PHP_EOL, $content);
+        // забираем первую линию и сразу делим ее по пробелам на параметры
+        $line = explode(' ', array_shift($lines));
+
+        // если это не самый верхний шаблон, но рекурсивно подгружаем шаблон в который надо вставить текущий,
+        // до тех пор, пока не выйдем на самый верх
+        if($line[0] == '@extend'){
+            $pages['{{'.$line[1].'}}'] = implode(PHP_EOL, $lines);
+            return $this->loadPage($line[2], $pages);
+        }
+
+        return $content;
+    }
+
+    function render($page, $vars = []){
+        $page = $this->loadPage($page);
+
+        $name = 'temp_'.date('Y_m_d_H_i_s').rand(1000000000, 9999999999);
+        $path = config('app.paths.temp', 'temp')."/$name.php";
+        file_put_contents($path, $page);
+
+        extract($vars);
+        /*
+            $vars = ['key1' => 123, 'key2' => 'test'];
+            =>
+            $key1 = 123;
+            $key2 = 'test';
+        */
+        
+        include $path;
+        unlink($path);
+    }
+}
