@@ -9,7 +9,9 @@ class BaseAuthController {
     {
         SYS::$shared['menu'] = include_once "menu/auth.php";
         
-        if(isset(SYS::$session['error']))
+        if(isset(SYS::$session['error'])){
             SYS::$shared['error'] = SYS::$session['error'];
+            unset($_SESSION['error']);
+        }
     }
 }

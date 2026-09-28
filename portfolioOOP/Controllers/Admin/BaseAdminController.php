@@ -17,6 +17,11 @@ class BaseAdminController {
             else 
                 SYS::redirect('/admin/auth');
         }
+        
+        if(isset(SYS::$session['error'])){
+            SYS::$shared['error'] = SYS::$session['error'];
+            unset($_SESSION['error']);
+        }
 
         SYS::$shared['user'] = $this->user;
     }

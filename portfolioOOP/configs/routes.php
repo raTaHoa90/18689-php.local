@@ -17,6 +17,8 @@ if(SYS::$isAuth){
     Routes::get('/admin/profile', 'Admin/ProfileController');
     Routes::get('/admin/catalogs', 'Admin/CatalogsController');
 
+    Routes::get('/admin/users', 'Admin/UsersController');
+
     Routes::post('/admin/profile', 'Admin/ProfileController@save');
     Routes::post('/admin/catalogs/getCatalogs', 'Admin/CatalogsController@getCatalogs');
     Routes::post('/admin/catalogs/createDir', 'Admin/CatalogsController@createDir');
