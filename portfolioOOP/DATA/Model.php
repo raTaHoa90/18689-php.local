@@ -5,8 +5,9 @@ class Model {
     private array $fields = [];
     public int $id;
 
-    function __construct(array $data)
+    function __construct(?array $data = null)
     {
+        if($data === null) return;
         $this->id = $data['id'] ?? 0;
         unset($data['id']);
         $this->fields = $data;
