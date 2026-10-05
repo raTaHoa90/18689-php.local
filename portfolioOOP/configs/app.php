@@ -6,5 +6,6 @@ return [
         'models' => 'DATA',
         'temp' => 'temp'
     ],
-    'debug' => true
+    'debug' => true,
+    'domain' => 'https://portfoliooop.18689-php.local/'
 ];

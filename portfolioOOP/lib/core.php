@@ -52,10 +52,18 @@ class SYS {
         (static::$routes)();
     }
 
+    static function emailValidation($email){
+        return !!preg_match(
+            '/^([\w+-]+\.)*([\w+-]+)?\w@([\w-]+\.){1,3}[\w]{2,}$/i',
+            trim($email),
+            $matches
+        );
+    }
+
     static function AutoAuth(){
         if( static::$authUser === null){
             static::$isAuth = isset(static::$session['hasAuth']);
-            static::$authUser = static::$isAuth ? Users::getUserById(static::$session['UID']) : null;
+            static::$authUser = static::$isAuth ? Users::Find(static::$session['UID']) : null;
         }
 
         return static::$authUser;
@@ -103,5 +111,6 @@ spl_autoload_register(function($className){
 
 
 include_once "lib/utilits.php";
+include_once "vendor/autoload.php";
 
 //loadModel('users');

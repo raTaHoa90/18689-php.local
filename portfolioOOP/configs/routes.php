@@ -19,6 +19,11 @@ if(SYS::$isAuth){
 
     Routes::get('/admin/users', 'Admin/UsersController');
 
+    Routes::get('/admin/chats', 'Admin/ChatsController');
+    Routes::get('/admin/chats/@saf', 'Admin/ChatsController@chat');
+
+    Routes::any('/admin/CreateSiteMap', 'Admin/MainController@CreateSiteMap');
+
     Routes::post('/admin/profile', 'Admin/ProfileController@save');
     Routes::post('/admin/catalogs/getCatalogs', 'Admin/CatalogsController@getCatalogs');
     Routes::post('/admin/catalogs/createDir', 'Admin/CatalogsController@createDir');

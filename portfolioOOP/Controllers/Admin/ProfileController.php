@@ -21,7 +21,7 @@ class ProfileController extends BaseAdminController {
                 SYS::$session['error'] = 'Несовпадают введеные пароли';
                 SYS::back();
             }
-            $this->user->password = $_POST['pass'];
+            $this->user->setPassword($_POST['pass']);
         }
 
         if(isset($_POST['login']) && !trim($_POST['login'])){

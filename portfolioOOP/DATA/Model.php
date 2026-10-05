@@ -25,14 +25,28 @@ class Model {
             : static::_class_to_table_name(static::class);
     }
 
-
-    static function all(): array {
-        return static::table('SELECT * FROM '.static::getTable().';');
+    static function allWhere(string $where = '', ?array $params = null): array {
+        return static::table('SELECT * FROM '.static::getTable(). ($where ? " WHERE $where" : '').';', $params);
     }
 
-    static function find(int $id): ?static{
-        $result = static::table('SELECT * FROM '.static::getTable().' WHERE id=$? LIMIT 1', [$id]);
+    static function count(string $where = '', ?array $params = null): int {
+        $result = static::table('SELECT count(*) as count_row FROM '.static::getTable(). ($where ? " WHERE $where" : ''), $params);
+        return isset($result[0]) ? $result[0]->count_row : 0;
+    }
+
+    static function all(): array {
+        return static::allWhere('');
+    }
+
+    static function find(int $id): ?static {
+        $result = static::allWhere('id=$? LIMIT 1', [$id]);
         return $result[0] ?? null;
+    }
+
+    static function create(array $data): static {
+        $obj = new static($data);
+        $obj->save();
+        return $obj;
     }
 
     function save(){
@@ -53,6 +67,8 @@ class Model {
 
             $this->id = SYS::$DB->insertGetId($insert, $values);
 
+            $this->_is_new = false;
+
         } else { // UPDATE
             $update = 'UPDATE '.static::getTable().' SET ';
             $values = [];
@@ -66,6 +82,10 @@ class Model {
 
             SYS::$DB->queryClose($update, $values);
         }
+    }
+
+    function delete(){
+        SYS::$DB->queryClose('DELETE FROM '.static::getTable().' WHERE id='.$this->id, []);
     }
 
     function __construct(?array $data = null)

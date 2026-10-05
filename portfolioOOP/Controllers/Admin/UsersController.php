@@ -5,7 +5,7 @@ namespace Controllers\Admin;
 use DATA\Users;
 use lib\SYS;
 
-class UsersController extends BaseAdminController {
+class UsersController extends BaseRoleAdminController {
 
     function __construct($name)
     {
