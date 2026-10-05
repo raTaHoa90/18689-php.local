@@ -72,7 +72,7 @@ class RegistrationController extends BaseAuthController {
                         Вы зарегистрировались на нашем сайте портфолио!<br>
                         ваш логин: <b>$login</b><br>
                         пароль: <b>$password</b><br><br>
-                        Добро пошаловать!!!
+                        Добро пожаловать!!!
                     </body>
                 </html>
             ENDMESSAGE);
